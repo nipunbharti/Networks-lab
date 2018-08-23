@@ -8,6 +8,7 @@
 int main()
 {
     char server_msg[256] = "Hello from the server side!";
+    char buffer[1024] = {0};
     //Creation of socket
     int server_socket = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -25,11 +26,10 @@ int main()
     int client_socket;
     while(1){
         client_socket = accept(server_socket, NULL, NULL); //Null holds the address the sockets are coming from
-        if(client_socket >= 0){
-            printf("HIT!\n");
-        }
+        int valread = read(client_socket, buffer, 1024);
+        printf("Message from client: %s\n", buffer);
         //Send data
-        send(client_socket, server_msg, sizeof(server_msg), 0);
+        send(client_socket, buffer, sizeof(buffer), 0);
         close(client_socket);
     }
 
